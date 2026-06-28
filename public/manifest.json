@@ -1,0 +1,9 @@
+{
+  "name": "FIFA WC 2026 Predictor",
+  "short_name": "WC2026",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "icons": [{ "src": "/trophy.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
