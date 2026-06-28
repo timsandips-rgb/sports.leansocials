@@ -1,0 +1,106 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function isSuperAdmin() {
+      return request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && getUserData().role == 'super_admin';
+    }
+    function isCommunityAdmin(communityId) {
+      return request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && getUserData().role == 'community_admin'
+        && getUserData().communityId == communityId;
+    }
+    function isApprovedMember(communityId) {
+      return request.auth != null && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && getUserData().communityId == communityId
+        && getUserData().status == 'approved';
+    }
+
+    // Communities
+    match /communities/{communityId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(communityId));
+      allow create: if isSuperAdmin();
+      allow update: if isSuperAdmin() || isCommunityAdmin(communityId);
+      allow delete: if isSuperAdmin();
+    }
+
+    // Users
+    match /users/{userId} {
+      allow read: if request.auth != null && (
+        request.auth.uid == userId ||
+        isSuperAdmin() ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+         isCommunityAdmin(getUserData().communityId) &&
+         getUserData().communityId == resource.data.communityId)
+      );
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth.uid == userId || isSuperAdmin() ||
+        (isCommunityAdmin(getUserData().communityId) && getUserData().communityId == resource.data.communityId);
+      allow delete: if isSuperAdmin();
+    }
+
+    // Matches
+    match /matches/{matchId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow create, update, delete: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Predictions
+    match /predictions/{predictionId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow create: if request.auth != null &&
+                     request.resource.data.userId == request.auth.uid &&
+                     isApprovedMember(request.resource.data.communityId);
+      allow update: if request.auth.uid == resource.data.userId &&
+                     resource.data.status != 'locked';
+      allow delete: if request.auth.uid == resource.data.userId && resource.data.status != 'locked';
+    }
+
+    // Scores
+    match /scores/{scoreId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow write: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Leaderboards
+    match /leaderboards/{leaderboardId} {
+      allow read: if request.auth != null;
+      allow write: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Deadlines
+    match /deadlines/{deadlineId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow write: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Notifications
+    match /notifications/{notificationId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow create, update, delete: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Messages
+    match /messages/{messageId} {
+      allow read: if request.auth != null && (isSuperAdmin() || isApprovedMember(resource.data.communityId));
+      allow create: if request.auth != null && isApprovedMember(request.resource.data.communityId);
+      allow delete: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+
+    // Audit Logs
+    match /audit_logs/{logId} {
+      allow read: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+      allow create: if request.auth != null;
+    }
+
+    // Settings
+    match /settings/{settingId} {
+      allow read: if request.auth != null;
+      allow write: if isSuperAdmin() || isCommunityAdmin(resource.data.communityId);
+    }
+  }
+}
