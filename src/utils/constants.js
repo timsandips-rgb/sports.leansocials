@@ -1,0 +1,124 @@
+export const ROLES = {
+  SUPER_ADMIN: 'super_admin',
+  COMMUNITY_ADMIN: 'community_admin',
+  PARTICIPANT: 'participant',
+};
+
+export const USER_STATUS = {
+  PENDING: 'pending',
+  APPROVED: 'approved',
+  REJECTED: 'rejected',
+  SUSPENDED: 'suspended',
+};
+
+export const MATCH_STATUS = {
+  SCHEDULED: 'scheduled',
+  LIVE: 'live',
+  COMPLETED: 'completed',
+  CANCELLED: 'cancelled',
+};
+
+export const STAGES = {
+  GROUP_STAGE: 'GROUP_STAGE',
+  ROUND_OF_32: 'ROUND_OF_32',
+  ROUND_OF_16: 'ROUND_OF_16',
+  QUARTER_FINAL: 'QUARTER_FINAL',
+  SEMI_FINAL: 'SEMI_FINAL',
+  THIRD_PLACE: 'THIRD_PLACE',
+  FINAL: 'FINAL',
+};
+
+export const STAGE_LABELS = {
+  GROUP_STAGE: 'Group Stage',
+  ROUND_OF_32: 'Round of 32',
+  ROUND_OF_16: 'Round of 16',
+  QUARTER_FINAL: 'Quarter Final',
+  SEMI_FINAL: 'Semi Final',
+  THIRD_PLACE: 'Third Place',
+  FINAL: 'Final',
+};
+
+export const STAGE_ORDER = [
+  STAGES.GROUP_STAGE,
+  STAGES.ROUND_OF_32,
+  STAGES.ROUND_OF_16,
+  STAGES.QUARTER_FINAL,
+  STAGES.SEMI_FINAL,
+  STAGES.THIRD_PLACE,
+  STAGES.FINAL,
+];
+
+export const KNOCKOUT_STAGES = [
+  STAGES.ROUND_OF_32,
+  STAGES.ROUND_OF_16,
+  STAGES.QUARTER_FINAL,
+  STAGES.SEMI_FINAL,
+  STAGES.THIRD_PLACE,
+  STAGES.FINAL,
+];
+
+export const DECISION_METHODS = {
+  REGULAR_TIME: 'regular_time',
+  EXTRA_TIME: 'extra_time',
+  PENALTY_SHOOTOUT: 'penalty_shootout',
+};
+
+export const DECISION_METHOD_LABELS = {
+  regular_time: 'Regular Time',
+  extra_time: 'Extra Time',
+  penalty_shootout: 'Penalty Shootout',
+};
+
+export const PREDICTION_STATUS = {
+  DRAFT: 'draft',
+  SUBMITTED: 'submitted',
+  LOCKED: 'locked',
+};
+
+export const NOTIFICATION_TYPES = {
+  BROADCAST: 'BROADCAST',
+  STAGE_REMINDER: 'STAGE_REMINDER',
+  DEADLINE_REMINDER: 'DEADLINE_REMINDER',
+  CONGRATULATIONS: 'CONGRATULATIONS',
+  GENERAL_ANNOUNCEMENT: 'GENERAL_ANNOUNCEMENT',
+  RESULT_PUBLISHED: 'RESULT_PUBLISHED',
+  PREDICTION_LOCKED: 'PREDICTION_LOCKED',
+};
+
+export const AUDIT_ACTIONS = {
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  PASSWORD_CHANGE: 'PASSWORD_CHANGE',
+  PREDICTION_SUBMIT: 'PREDICTION_SUBMIT',
+  PREDICTION_EDIT: 'PREDICTION_EDIT',
+  PREDICTION_DRAFT: 'PREDICTION_DRAFT',
+  RESULT_UPDATE: 'RESULT_UPDATE',
+  DEADLINE_CHANGE: 'DEADLINE_CHANGE',
+  USER_APPROVAL: 'USER_APPROVAL',
+  USER_REJECTION: 'USER_REJECTION',
+  USER_SUSPENSION: 'USER_SUSPENSION',
+  COMMUNITY_CREATE: 'COMMUNITY_CREATE',
+  COMMUNITY_UPDATE: 'COMMUNITY_UPDATE',
+  MATCH_CREATE: 'MATCH_CREATE',
+  MATCH_UPDATE: 'MATCH_UPDATE',
+  MATCH_DELETE: 'MATCH_DELETE',
+  NOTIFICATION_SENT: 'NOTIFICATION_SENT',
+  SETTINGS_CHANGE: 'SETTINGS_CHANGE',
+  WINNER_DECLARED: 'WINNER_DECLARED',
+  SCORES_CALCULATED: 'SCORES_CALCULATED',
+};
+
+export const DEFAULT_SCORING_RULES = {
+  correctWinner: 5,
+  correctExactScore: 5,
+  correctDecisionMethod: 5,
+  allCorrectBonus: 10,
+  maxScorePerMatch: 25,
+};
+
+export const DEFAULT_COMMUNITY_SETTINGS = {
+  scoringRules: DEFAULT_SCORING_RULES,
+  allowLateRegistration: false,
+  predictionVisibility: 'after_deadline',
+  timezone: 'America/New_York',
+};
